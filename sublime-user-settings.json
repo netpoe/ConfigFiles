@@ -1,0 +1,35 @@
+{
+	"always_show_minimap_viewport": true,
+	"bold_folder_labels": true,
+	"caret_style": "blink",
+	"color_scheme": "Packages/Material Theme/schemes/Material-Theme-Darker.tmTheme",
+	"folder_exclude_patterns":
+	[
+		"node_modules",
+		".meteor",
+		".grunt",
+		".git",
+		".sass-cache",
+		"dist",
+		".tmp",
+		"npm-debug.log",
+		".svn",
+		".hg",
+		"CVS"
+	],
+	"font_face": "Source Code Pro",
+	"font_size": 13,
+	"highlight_line": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"line_padding_bottom": 3,
+	"line_padding_top": 3,
+	"margin": 2,
+	"overlay_scroll_bars": "enabled",
+	"tab_size": 2,
+	"theme": "Material-Theme-Darker.sublime-theme",
+	"translate_tabs_to_spaces": false,
+	"word_wrap": false
+}
