@@ -113,8 +113,18 @@ export SQL="${HTD}/Codio/MySQL"
 # export HGPWD=~/.hg-server-pwd.txt
 export HGPWD=Ko0ddeIopBNS
 
+# Open new tab in iTerm
+N()
+{
+	local cmd=$1
+	osascript -e 'tell application "iTerm" to activate' \
+	-e 'tell application "System Events" to tell process "iTerm" to keystroke "t" using command down' \
+	-e 'tell application "System Events" to tell process "iTerm" to keystroke "clear"' \
+	-e 'tell application "System Events" to tell process "iTerm" to key code 52'
+}
+
 # Get latest wordpress install and EBM it
-function wp-install
+wp-install()
 {
 	local directory_name=$1
 	local db_name=$2
@@ -145,7 +155,8 @@ function wp-install
 	stt
 }
 
-function meteor-install {
+meteor-install()
+{
 	local project_name=$1
 	cd $Meteor
 	meteor create $project_name
@@ -156,10 +167,11 @@ function meteor-install {
 	cp -R "$EBM/src/scss/." "$Meteor/$project_name/client/stylesheets/"
 	git init
 	meteor remove insecure autopublish
-	meteor add iron:router underscore jquery
+	meteor add iron:router underscore jquery check reactive-var tracker random accounts-base accounts-password accounts-ui aldeed:collection2 aldeed:simple-schema ecmascript session
 	stt
 	cd ".grunt" 
 	npm install
+	N
 	cd ..
 	meteor update 
 	meteor
@@ -167,5 +179,6 @@ function meteor-install {
 
 export -f wp-install
 export -f meteor-install
+export -f N
 export NVM_DIR="/Users/gandresibarra/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
