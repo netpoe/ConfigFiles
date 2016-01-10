@@ -158,6 +158,8 @@ wp-install()
 meteor-install()
 {
 	local project_name=$1
+	local -a view_names
+	view_names=('index' 'show' 'new' 'edit')
 	cd $Meteor
 	meteor create $project_name
 	cd $project_name
@@ -167,13 +169,25 @@ meteor-install()
 	cp -R "$EBM/src/scss/." "$Meteor/$project_name/client/stylesheets/"
 	git init
 	meteor remove insecure autopublish
-	meteor add iron:router underscore jquery check reactive-var tracker random accounts-base accounts-password accounts-ui aldeed:collection2 aldeed:simple-schema ecmascript session
-	stt
+	meteor add iron:router underscore jquery check reactive-var tracker random accounts-base accounts-password accounts-ui aldeed:collection2 aldeed:simple-schema ecmascript session service-configuration
 	cd ".grunt" 
 	npm install
 	N
 	cd ..
+	for view in ${@:2}
+	do
+		mkdir "client/views/$view"
+		touch	"lib/router/controller-$view.js" \
+					"lib/collections/collection-$view.js" \
+					"server/methods/methods-$view.js" \
+					"server/publications/publications-$view.js"
+		for i in ${view_names[@]}; do
+			touch "client/views/$view/$view-$i.html" \
+						"client/views/$view/$view-$i.js"
+		done
+	done
 	meteor update 
+	stt
 	meteor
 }
 
