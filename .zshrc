@@ -160,6 +160,7 @@ meteor-install()
 	local project_name=$1
 	local -a view_names
 	view_names=('index' 'show' 'new' 'edit')
+	
 	cd $Meteor
 	meteor create $project_name
 	cd $project_name
@@ -191,8 +192,28 @@ meteor-install()
 	meteor
 }
 
+meteor-directories()
+{
+	local -a view_names
+	view_names=('index' 'show' 'new' 'edit')
+
+	for view in $1
+	do
+		mkdir "client/views/$view"
+		touch	"lib/router/controller-$view.js" \
+					"lib/collections/collection-$view.js" \
+					"server/methods/methods-$view.js" \
+					"server/publications/publications-$view.js"
+		for i in ${@:2}; do
+			touch "client/views/$view/$view-$i.html" \
+						"client/views/$view/$view-$i.js"
+		done
+	done
+}
+
 export -f wp-install
 export -f meteor-install
 export -f N
+export -f meteor-directories
 export NVM_DIR="/Users/gandresibarra/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
