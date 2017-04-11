@@ -1,5 +1,9 @@
-# Path to mongodb bin
-export PATH=$PATH:"/Users/gandresibarra/mongodb/bin"
+# Path to mongodb bin & custom commands
+export PATH="/Users/GustavoIbarra/mongodb/bin:/Users/GustavoIbarra/.composer/vendor/bin:/Users/GustavoIbarra/bin:$PATH"
+# export PATH="$(brew --prefix homebrew/php/php54)/bin:$PATH"
+# export PATH="$(brew --prefix homebrew/php/php55)/bin:$PATH"
+# export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
+export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -15,19 +19,35 @@ ZSH_THEME="bira"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Sass Script
-alias sw="sass --watch"
-alias swm="sass --watch main.scss:main.css"
-alias sws="sass --watch style.scss:style.css"
-alias swebm="sass --watch ebm.scss:ebm.css"
+# alias sw="sass --watch"
+# alias swm="sass --watch main.scss:main.css"
+# alias sws="sass --watch style.scss:style.css"
+# alias swebm="sass --watch ebm.scss:ebm.css"
 # CoffeeScript
-alias coffeew="coffee --watch --compile --output lib/ src/"
+# alias coffeew="coffee --watch --compile --output lib/ src/"
 # GIT Clone EBM Boileplate
-alias gcbp="git clone https://github.com/EasyBoxModel/EBM.git"
 alias gitc="git checkout"
+alias gitcam="git commit --amend -a --no-edit"
+alias gitcb="git checkout -b"
+alias gitbd="git branch -D"
 alias gitpo="git pull origin"
+alias gitpu="git pull upstream"
+alias gitb="git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads"
+alias gitrb="git ls-remote --heads origin"
+alias gitlog="git log --name-status"
+alias gits="git status"
 # SSH
 alias sshroot="ssh -o ServerAliveInterval=100"
-
+# Custom commands
+# alias meteor-directories="~/bin/meteor-directories"
+alias wp-install="~/bin/wp-install"
+alias wp-build="~/bin/wp-build"
+alias meteor-install="~/bin/meteor-install"
+alias laravel-install="~/bin/laravel-install"
+# Pretty JSON
+alias json="python -mjson.tool"
+# Sublime text
+alias stt="stt"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -72,7 +92,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# export PATH="/bin:/Users/gandresibarra/.rvm/bin:/usr/local/git/bin:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/heroku/bin"
+# export PATH="/bin:/Users/GustavoIbarra/.rvm/bin:/usr/local/git/bin:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/heroku/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -95,125 +115,17 @@ source $ZSH/oh-my-zsh.sh
 # export PATH=$(brew --prefix ruby)/bin:$PATH
 # export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
-# ENV VARIABLES
-# export PATH=/bin:/Users/gandresibarra/.rvm/bin:/usr/local/git/bin:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/heroku/bin
-
-export HTD=/Volumes/Seagate\ Backup\ Plus\ Drive/htdocs/
-export EBM="${HTD}EBM"
-export HTML5="${HTD}HTML5"
-export JS="${HTD}JS"
-export Meteor="${HTD}Meteor"
+export p="/Users/GustavoIbarra/Projects/"
+export HDrive=/Volumes/Seagate\ Backup\ Plus\ Drive
+export HTD="${HDrive}/htdocs"
+export EBM="${p}/EBM"
+export HTML5="${HTD}/HTML5"
+export JS="${HTD}/JS"
+export Meteor="${HTD}/Meteor"
 export BASHDIR="${HTD}/Codio/Bash"
-export WP="${HTD}WP"
+export WP="${p}/Wordpress"
 export SQL="${HTD}/Codio/MySQL"
+export TEMP="${p}/temp_assets"
+export kf="${p}/kf"
 
-###
-
-# HGServer pwd
-# export HGPWD=~/.hg-server-pwd.txt
-export HGPWD=Ko0ddeIopBNS
-
-# Open new tab in iTerm
-N()
-{
-	local cmd=$1
-	osascript -e 'tell application "iTerm" to activate' \
-	-e 'tell application "System Events" to tell process "iTerm" to keystroke "t" using command down' \
-	-e 'tell application "System Events" to tell process "iTerm" to keystroke "clear"' \
-	-e 'tell application "System Events" to tell process "iTerm" to key code 52'
-}
-
-# Get latest wordpress install and EBM it
-wp-install()
-{
-	local directory_name=$1
-	local db_name=$2
-	cd $WP
-	mkdir $directory_name
-	cd $directory_name
-	curl -O https://wordpress.org/latest.tar.gz
-	tar -xvf latest.tar.gz
-	cp -R wordpress/. .
-	rm -r wordpress/
-	mv wp-config-sample.php wp-config.php
-	echo -e "?>" >> wp-config.php
-	sed -i '' "s/database_name_here/$db_name/g" wp-config.php
-	sed -i '' "s/username_here/root/g" wp-config.php
-	sed -i '' "s/password_here/N3tp0ePl\@n/g" wp-config.php
-	cd wp-content/themes
-	gcbp
-	cd EBM
-	git checkout wordpress-boilerplate
-	cd ..
-	mv EBM $directory_name
-	rm -rf $directory_name/.git
-	mv $directory_name/.gitignore ../..
-	mv $directory_name/README.md ../..
-	rm -rf twentyfourteen twentythirteen
-	cd ../..
-	git init
-	stt
-}
-
-meteor-install()
-{
-	local project_name=$1
-	local -a view_names
-	view_names=('index' 'show' 'new' 'edit')
-	
-	cd $Meteor
-	meteor create $project_name
-	cd $project_name
-	find . -maxdepth 1 -not -name ".meteor" -delete
-	cp -R "$Meteor/meteor_BP/." "$Meteor/$project_name/"
-	rm -rf ".git"
-	cp -R "$EBM/src/scss/." "$Meteor/$project_name/client/stylesheets/"
-	git init
-	meteor remove insecure autopublish
-	meteor add iron:router underscore jquery check reactive-var tracker random accounts-base accounts-password accounts-ui aldeed:collection2 aldeed:simple-schema ecmascript session service-configuration
-	cd ".grunt" 
-	npm install
-	N
-	cd ..
-	for view in ${@:2}
-	do
-		mkdir "client/views/$view"
-		touch	"lib/router/controller-$view.js" \
-					"lib/collections/collection-$view.js" \
-					"server/methods/methods-$view.js" \
-					"server/publications/publications-$view.js"
-		for i in ${view_names[@]}; do
-			touch "client/views/$view/$view-$i.html" \
-						"client/views/$view/$view-$i.js"
-		done
-	done
-	meteor update 
-	stt
-	meteor
-}
-
-meteor-directories()
-{
-	local -a view_names
-	view_names=('index' 'show' 'new' 'edit')
-
-	for view in $1
-	do
-		mkdir "client/views/$view"
-		touch	"lib/router/controller-$view.js" \
-					"lib/collections/collection-$view.js" \
-					"server/methods/methods-$view.js" \
-					"server/publications/publications-$view.js"
-		for i in ${@:2}; do
-			touch "client/views/$view/$view-$i.html" \
-						"client/views/$view/$view-$i.js"
-		done
-	done
-}
-
-export -f wp-install
-export -f meteor-install
-export -f N
-export -f meteor-directories
-export NVM_DIR="/Users/gandresibarra/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+export LOCAL_IP=$(ipconfig getifaddr en0)
