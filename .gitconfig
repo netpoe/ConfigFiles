@@ -2,14 +2,18 @@
 	name = Gus
 	email = yo@soygus.com
 [alias]
-  	ac = !git add -A && git commit -a
+	a = git commit -a
+	ac = !git add -A && git commit -a
+	s = !git status
 	po = !git push origin
-    pob = !git push origin $(git rev-parse --abbrev-ref HEAD)
-    pub = !git push upstream $(git rev-parse --abbrev-ref HEAD)
-    pof = !git push origin -f $(git rev-parse --abbrev-ref HEAD)
-    puf = !git push upstream -f $(git rev-parse --abbrev-ref HEAD)
-    rem = !git rebase master
-    update = !git checkout master && git pull upstream master && git checkout - && git rebase master
+	pob = !git push origin $(git rev-parse --abbrev-ref HEAD)
+	pub = !git push upstream $(git rev-parse --abbrev-ref HEAD)
+	pof = !git push origin -f $(git rev-parse --abbrev-ref HEAD)
+	puf = !git push upstream -f $(git rev-parse --abbrev-ref HEAD)
+	rem = !git rebase master
+	update = !git pull upstream $(git rev-parse --abbrev-ref HEAD) && git checkout master && git pull upstream master && git checkout - && git rebase master
+	opdate = !git pull origin $(git rev-parse --abbrev-ref HEAD) && git checkout master && git pull upstream master && git checkout - && git rebase master
+	refresh = !git fetch $(git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d / -f 1) && git reset --hard $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
 [filter "media"]
 	required = true
 	clean = git media clean %f
